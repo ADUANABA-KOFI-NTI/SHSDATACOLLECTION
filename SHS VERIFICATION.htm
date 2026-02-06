@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Verification System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        h1, h2, h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-section {
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .profile-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .profile-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .profile-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .staff-category {
+            margin-bottom: 30px;
+        }
+
+        .category-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .staff-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .staff-item {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+
+        .staff-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.2);
+        }
+
+        .staff-item.checked {
+            background: #e8f5e9;
+            border-color: #28a745;
+        }
+
+        .staff-item.unchecked {
+            background: #ffebee;
+            border-color: #dc3545;
+        }
+
+        .staff-info {
+            flex: 1;
+        }
+
+        .staff-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .staff-details {
+            font-size: 13px;
+            color: #666;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 5px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .custom-checkbox {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            accent-color: #28a745;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .badge-present {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-absent {
+            background: #dc3545;
+            color: white;
+        }
+
+        .summary {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .summary-item {
+            text-align: center;
+        }
+
+        .summary-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        @media (max-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .staff-details {
+                grid-template-columns: 1fr;
+            }
+
+            .summary {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Staff Verification System</h1>
+
+        <!-- Login Section -->
+        <div id="loginSection" class="card login-section">
+            <h2>🔐 Verification Login</h2>
+            <div id="loginMessage"></div>
+            <div class="form-group">
+                <label for="staffIdInput">Enter Your Staff ID:</label>
+                <input type="text" id="staffIdInput" placeholder="Enter your unique Staff ID" autocomplete="off">
+            </div>
+            <button class="btn btn-primary" onclick="verifyAccess()">Verify & Login</button>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboardSection" class="hidden">
+            <!-- Profile Dashboard -->
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>👤 Your Profile</h2>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+                <div id="profileDashboard" class="profile-grid"></div>
+            </div>
+
+            <!-- Staff Verification Section -->
+            <div class="card">
+                <h2>✅ Staff Verification</h2>
+                <div id="verificationMessage"></div>
+                
+                <div class="summary" id="summaryCounts">
+                    <div class="summary-item">
+                        <div class="summary-number" id="totalStaff">0</div>
+                        <div class="summary-label">Total Staff</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-number" id="confirmedCount">0</div>
+                        <div class="summary-label">Confirmed Present</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-number" id="unconfirmedCount">0</div>
+                        <div class="summary-label">Not Present</div>
+                    </div>
+                </div>
+
+                <div id="staffListContainer"></div>
+
+                <button class="btn btn-success" onclick="submitVerification()" style="margin-top: 20px;">
+                    📤 SUBMIT CONFIRMED STAFF
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="card hidden">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading data, please wait...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // REPLACE THIS WITH YOUR DEPLOYED WEB APP URL
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwzBkuzOvDxcmgbgZDiFH_HWHo9Zz5qklVsroUzktfZpiCRj0ieCU1qgGHw5wm0zZy0/exec';
+        
+        let userProfile = null;
+        let staffData = {};
+        let verificationStatus = {};
+
+        // Verify user access
+        function verifyAccess() {
+            const staffId = document.getElementById('staffIdInput').value.trim();
+            
+            if (!staffId) {
+                showMessage('loginMessage', 'Please enter your Staff ID', 'error');
+                return;
+            }
+
+            showLoading(true);
+            
+            fetch(`${WEB_APP_URL}?action=verifyAccess&staffId=${encodeURIComponent(staffId)}`)
+                .then(response => response.json())
+                .then(data => {
+                    showLoading(false);
+                    
+                    if (data.success) {
+                        userProfile = data.profile;
+                        showDashboard();
+                    } else {
+                        showMessage('loginMessage', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    showLoading(false);
+                    showMessage('loginMessage', 'Connection error. Please try again.', 'error');
+                    console.error('Error:', error);
+                });
+        }
+
+        // Show dashboard and load staff data
+        function showDashboard() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            
+            displayProfile();
+            loadStaffList();
+        }
+
+        // Display user profile
+        function displayProfile() {
+            const profileDiv = document.getElementById('profileDashboard');
+            
+            const fields = [
+                { label: 'Circuit', value: userProfile.circuit },
+                { label: 'EMIS School Number', value: userProfile.emisSchoolNumber },
+                { label: 'School Name', value: userProfile.nameOfSchool },
+                { label: 'Staff ID', value: userProfile.staffId },
+                { label: 'Name', value: `${userProfile.firstName} ${userProfile.surname} ${userProfile.otherNames || ''}` },
+                { label: 'Gender', value: userProfile.gender },
+                { label: 'Class/Office', value: userProfile.classOffice },
+                { label: 'Main Subject', value: userProfile.mainSubject },
+                { label: 'Non-Teaching Schedule', value: userProfile.nonTeachingSchedule }
+            ];
+
+            profileDiv.innerHTML = fields.map(field => `
+                <div class="profile-item">
+                    <div class="profile-label">${field.label}</div>
+                    <div class="profile-value">${field.value || 'N/A'}</div>
+                </div>
+            `).join('');
+        }
+
+        // Load staff list for verification
+        function loadStaffList() {
+            showLoading(true);
+            
+            fetch(`${WEB_APP_URL}?action=getStaffList`)
+                .then(response => response.json())
+                .then(data => {
+                    showLoading(false);
+                    
+                    if (data.success) {
+                        staffData = data.data;
+                        displayStaffList();
+                        updateSummary();
+                    } else {
+                        showMessage('verificationMessage', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    showLoading(false);
+                    showMessage('verificationMessage', 'Error loading staff list.', 'error');
+                    console.error('Error:', error);
+                });
+        }
+
+        // Display staff list with categories
+        function displayStaffList() {
+            const container = document.getElementById('staffListContainer');
+            let html = '';
+
+            // Teaching Staff
+            if (staffData.teachingStaff && staffData.teachingStaff.length > 0) {
+                html += `
+                    <div class="staff-category">
+                        <div class="category-header">
+                            <h3>👨‍🏫 Teaching Staff</h3>
+                            <span>${staffData.teachingStaff.length} Members</span>
+                        </div>
+                        <div class="staff-list">
+                            ${staffData.teachingStaff.map(staff => createStaffItem(staff)).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Non-Teaching Staff
+            if (staffData.nonTeachingStaff && staffData.nonTeachingStaff.length > 0) {
+                html += `
+                    <div class="staff-category">
+                        <div class="category-header">
+                            <h3>👥 Non-Teaching Staff</h3>
+                            <span>${staffData.nonTeachingStaff.length} Members</span>
+                        </div>
+                        <div class="staff-list">
+                            ${staffData.nonTeachingStaff.map(staff => createStaffItem(staff)).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Create individual staff item HTML
+        function createStaffItem(staff) {
+            const fullName = `${staff.firstName} ${staff.surname} ${staff.otherNames || ''}`.trim();
+            const isChecked = verificationStatus[staff.staffId] === 'PRESENT';
+            
+            return `
+                <div class="staff-item ${isChecked ? 'checked' : ''}" id="staff-${staff.staffId}">
+                    <div class="staff-info">
+                        <div class="staff-name">
+                            ${fullName}
+                            ${isChecked ? '<span class="status-badge badge-present">✓ Present</span>' : ''}
+                        </div>
+                        <div class="staff-details">
+                            <span><strong>ID:</strong> ${staff.staffId}</span>
+                            <span><strong>Gender:</strong> ${staff.gender || 'N/A'}</span>
+                            <span><strong>Class/Office:</strong> ${staff.classOffice || 'N/A'}</span>
+                            <span><strong>Subject:</strong> ${staff.mainSubject || staff.nonTeachingSchedule || 'N/A'}</span>
+                        </div>
+                    </div>
+                    <div class="checkbox-container">
+                        <input 
+                            type="checkbox" 
+                            class="custom-checkbox" 
+                            id="check-${staff.staffId}"
+                            onchange="toggleStaffStatus('${staff.staffId}')"
+                            ${isChecked ? 'checked' : ''}
+                        >
+                    </div>
+                </div>
+            `;
+        }
+
+        // Toggle staff verification status
+        function toggleStaffStatus(staffId) {
+            const checkbox = document.getElementById(`check-${staffId}`);
+            const staffItem = document.getElementById(`staff-${staffId}`);
+            
+            if (checkbox.checked) {
+                verificationStatus[staffId] = 'PRESENT';
+                staffItem.classList.add('checked');
+                staffItem.classList.remove('unchecked');
+            } else {
+                verificationStatus[staffId] = 'NOT PRESENT';
+                staffItem.classList.remove('checked');
+                staffItem.classList.add('unchecked');
+            }
+            
+            updateSummary();
+        }
+
+        // Update summary counts
+        function updateSummary() {
+            const totalTeaching = staffData.teachingStaff ? staffData.teachingStaff.length : 0;
+            const totalNonTeaching = staffData.nonTeachingStaff ? staffData.nonTeachingStaff.length : 0;
+            const total = totalTeaching + totalNonTeaching;
+            
+            const confirmed = Object.values(verificationStatus).filter(status => status === 'PRESENT').length;
+            const unconfirmed = Object.values(verificationStatus).filter(status => status === 'NOT PRESENT').length;
+            
+            document.getElementById('totalStaff').textContent = total;
+            document.getElementById('confirmedCount').textContent = confirmed;
+            document.getElementById('unconfirmedCount').textContent = unconfirmed;
+        }
+
+        // Submit verification
+        function submitVerification() {
+            const allStaff = [...(staffData.teachingStaff || []), ...(staffData.nonTeachingStaff || [])];
+            
+            // Auto-mark unchecked staff as NOT PRESENT
+            allStaff.forEach(staff => {
+                if (!verificationStatus[staff.staffId]) {
+                    verificationStatus[staff.staffId] = 'NOT PRESENT';
+                }
+            });
+
+            if (Object.keys(verificationStatus).length === 0) {
+                showMessage('verificationMessage', 'Please verify at least one staff member before submitting.', 'error');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to submit this verification? This will update the staff records.')) {
+                return;
+            }
+
+            showLoading(true);
+
+            const formData = new FormData();
+            formData.append('action', 'submitVerification');
+            formData.append('data', JSON.stringify(verificationStatus));
+
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    showLoading(false);
+                    
+                    if (data.success) {
+                        const confirmed = Object.values(verificationStatus).filter(s => s === 'PRESENT').length;
+                        const notPresent = Object.values(verificationStatus).filter(s => s === 'NOT PRESENT').length;
+                        
+                        showMessage('verificationMessage', 
+                            `✅ Successfully submitted! Confirmed: ${confirmed} | Not Present: ${notPresent}`, 
+                            'success');
+                    } else {
+                        showMessage('verificationMessage', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    showLoading(false);
+                    showMessage('verificationMessage', 'Error submitting verification.', 'error');
+                    console.error('Error:', error);
+                });
+        }
+
+        // Show message
+        function showMessage(elementId, message, type) {
+            const msgDiv = document.getElementById(elementId);
+            msgDiv.className = `alert alert-${type}`;
+            msgDiv.textContent = message;
+            msgDiv.classList.remove('hidden');
+            
+            setTimeout(() => {
+                msgDiv.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Show/hide loading spinner
+        function showLoading(show) {
+            const spinner = document.getElementById('loadingSpinner');
+            if (show) {
+                spinner.classList.remove('hidden');
+            } else {
+                spinner.classList.add('hidden');
+            }
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                location.reload();
+            }
+        }
+
+        // Handle Enter key on login
+        document.getElementById('staffIdInput')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                verifyAccess();
+            }
+        });
+    </script>
+</body>
+</html>
